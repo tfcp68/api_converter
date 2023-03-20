@@ -1,13 +1,13 @@
 function make_message_pretty(message: string): Array<Array<string>> {
     //todo убрать комментарии в мермаиде
-    let splited_message: Array<string> = message.split('\n')
+    let splitted_message: Array<string> = message.split('\n')
     let pretty_message: Array<Array<string>> = [] 
 
-    for(let i = 1; i < splited_message.length; i++) {
-        splited_message[i] = splited_message[i].replace(/\s/g, "")
-        let flag_start: boolean = splited_message[i].includes('[*]-->')
-        let flag_end: boolean = splited_message[i].includes('-->[*]')
-        let pair_of_elements: Array<string> = splited_message[i].split('-->')
+    for(let i = 1; i < splitted_message.length; i++) {
+        splitted_message[i] = splitted_message[i].replace(/\s/g, "")
+        let flag_start: boolean = splitted_message[i].includes('[*]-->')
+        let flag_end: boolean = splitted_message[i].includes('-->[*]')
+        let pair_of_elements: Array<string> = splitted_message[i].split('-->')
         
         if(flag_start && flag_end) {
             pair_of_elements[0] = '[*]-->'
