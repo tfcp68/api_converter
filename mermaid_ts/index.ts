@@ -1,70 +1,51 @@
-function make_message_pretty(message: string): Array<Array<string>> {
-    //todo убрать комментарии в мермаиде
-    let splitted_message: Array<string> = message.split('\n')
-    let pretty_message: Array<Array<string>> = [] 
+type DictElements = { [key: string]: number }
+type PrettyMessage = string[][]
+type BoolMatrix = boolean[][]
 
-    for(let i = 1; i < splitted_message.length; i++) {
-        splitted_message[i] = splitted_message[i].replace(/\s/g, "")
-        let flag_start: boolean = splitted_message[i].includes('[*]-->')
-        let flag_end: boolean = splitted_message[i].includes('-->[*]')
-        let pair_of_elements: Array<string> = splitted_message[i].split('-->')
-        
-        if(flag_start && flag_end) {
-            pair_of_elements[0] = '[*]-->'
-            pair_of_elements[1] = '-->[*]'
-        }
-        else if(flag_start) {
-            pair_of_elements[0] = '[*]-->'
-        }
-        else if(flag_end) {
-            pair_of_elements[1] = '-->[*]'
-        }
 
-        pretty_message.push(pair_of_elements)
-    }
+function make_message_pretty(message: string): PrettyMessage {
+    const pretty_message = message
+    .split('\n')
+    .slice(1)
+    .map(item => item
+        .replace('[*]-->', '##START##-->')
+        .replace('[*] -->', '##START##-->')
+        .replace('-->[*]', '-->##END##')
+        .replace('--> [*]', '-->##END##')
+    )
+    .map((e => e.split('-->').map(t => t.trim())))
 
     return pretty_message
 }
 
 
-function get_all_elements(pretty_message: Array<Array<string>>): { [key: string]: number } {
-    let dict_elements: { [key: string]: number } = {}
-    let value: number = 0
-    let vect_elements: Array<string> = [] 
-
-    for(let i = 0; i < pretty_message.length; i++) {
-        for(let j = 0; j < 2; j++) {
-            let element: string = pretty_message[i][j]
-
-            if(!dict_elements.hasOwnProperty(element)) {
-                dict_elements[element] = value
-                vect_elements.push(element)
-                value++
-            }
-        }
-    }
-
-    //todo return vect_elements
+function get_all_elements(pretty_message: PrettyMessage): DictElements {
+    const dict_elements = pretty_message
+    .flatMap((s) => s)
+    .reduce((acc, s) => (acc.includes(s) ? acc : acc.concat(s)), [] as string[])
+    .reduce(
+        (acc, s, ix) =>
+            Object.assign(acc, {
+                [s]: ix,
+            }),
+        {}
+    )
     return dict_elements
 }
 
 
-function mark_graph(pretty_message: Array<Array<string>>, all_elements: { [key: string]: number }): Array<Array<Boolean>> {
-    let mermaid_graph: Array<Array<Boolean>> = []
+function mark_graph(pretty_message: PrettyMessage, all_elements: DictElements): BoolMatrix {
+    const new_size: number = Object.keys(all_elements).length
+    const mermaid_graph = Array<Array<boolean>>(new_size)
 
-    //resize
-    let new_size: number = Object.keys(all_elements).length
-    mermaid_graph.length += new_size
     for(let i = 0; i < mermaid_graph.length; i++) {
-        mermaid_graph[i] = new Array<Boolean>
-        mermaid_graph[i].length += new_size
-        mermaid_graph[i].fill(false)
+        mermaid_graph[i] = Array<boolean>(new_size).fill(false)
     }
 
     for(let i = 0; i < pretty_message.length; i++) {
-        let pair_of_elements: Array<string> = pretty_message[i]
-        let from = all_elements[pair_of_elements[0]]
-        let to = all_elements[pair_of_elements[1]]
+        const pair_of_elements: string[] = pretty_message[i]
+        const from = all_elements[pair_of_elements[0]]
+        const to = all_elements[pair_of_elements[1]]
 
         mermaid_graph[from][to] = true
     }
@@ -73,16 +54,16 @@ function mark_graph(pretty_message: Array<Array<string>>, all_elements: { [key: 
 }
 
 
-function make_mermaid_graph(message: string): Array<Array<Boolean>> {
-    let pretty_message: Array<Array<string>> = make_message_pretty(message)
-    let all_elements: { [key: string]: number } = get_all_elements(pretty_message)
-    let mermaid_graph: Array<Array<Boolean>> = mark_graph(pretty_message, all_elements)
+function make_mermaid_graph(message: string) {
+    const pretty_message: PrettyMessage = make_message_pretty(message)
+    const all_elements: DictElements = get_all_elements(pretty_message)
+    const mermaid_graph: BoolMatrix = mark_graph(pretty_message, all_elements)
 
     return mermaid_graph
 }
 
 
-let mermaid_str: string = `stateDiagram-v2
+const mermaid_str: string = `stateDiagram-v2
     [*] --> Still
     Still --> [*]
     Still --> Moving
