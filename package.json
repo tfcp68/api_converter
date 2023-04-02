@@ -1,34 +1,24 @@
 {
-	"name": "api_converter",
-	"version": "0.1.0",
+	"name": "jison",
+	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "jisonTransformer.ts",
 	"scripts": {
-		"test": "node .dist/index.js",
-		"build": "tsc --project tsconfig.json"
+		"test": "node .dist/mermaid/jisonTransformer.js",
+		"build": "tsc --project tsconfig.json",
+		"start": "webpack --config=config_webpack.js && node dist/bundle.js"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/tfcp68/api_converter.git"
-	},
-	"author": "Alexander Solodonvikov",
+	"author": "",
 	"license": "ISC",
-	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.55.0",
-		"@typescript-eslint/parser": "^5.55.0",
-		"eslint": "^8.36.0",
-		"eslint-config-prettier": "^8.7.0",
-		"eslint-plugin-prettier": "^4.2.1",
-		"eslint-plugin-react": "^7.32.2",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-webpack-plugin": "^4.0.0",
-		"husky": "^8.0.3",
-		"jest": "^29.3.1",
-		"prettier": "^2.8.1",
-		"ts-jest": "^29.0.5",
-		"typescript": "^4.9.4"
-	},
 	"dependencies": {
-		"ts-node": "^10.9.1"
+		"@types/node": "^18.15.11",
+		"jison": "^0.4.18",
+		"vite": "^4.2.1"
+	},
+	"devDependencies": {
+		"ts-loader": "^9.4.2",
+		"typescript": "^5.0.3",
+		"webpack": "^5.77.0",
+		"webpack-cli": "^5.0.1"
 	}
 }
