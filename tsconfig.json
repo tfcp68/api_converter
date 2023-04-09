@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
-		"target": "ES2021",
-		"module": "commonJS",
+		"target": "esnext",
+		"module": "esnext",
 		"outDir": "./dist",
 		"sourceMap": true,
 		"moduleResolution": "node",

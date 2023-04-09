@@ -16,6 +16,7 @@
 		"vite": "^4.2.1"
 	},
 	"devDependencies": {
+		"mermaid": "^10.1.0",
 		"ts-loader": "^9.4.2",
 		"typescript": "^5.0.3",
 		"webpack": "^5.77.0",

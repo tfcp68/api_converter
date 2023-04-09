@@ -1,10 +1,9 @@
-// @ts-ignore No typings for jison
+// @ts-ignore
 const jison=require('jison')
-
-
-import value from './stateGrammar.jison'
-
-const jison_grammar_state: string = value
+import * as fs from 'fs';
+// @ts-ignore
+//import mermaid from 'mermaid';
+const grammar=fs.readFileSync('./mermaid/stateGrammar.jison').toString('utf8');
 
 
 export const transformJison = (src: string): string => {
@@ -22,6 +21,7 @@ export const transformJison = (src: string): string => {
   return `${source} ${exporter}`;
 };
 
+const stateDiagramParser=new jison.Parser(grammar);
 
 
 const input = `stateDiagram-v2
@@ -30,7 +30,12 @@ const input = `stateDiagram-v2
     Still --> Moving
     Moving --> Still
     Moving --> Crash
-    Crash --> [*]`
+    Crash --> [*]`;
 
 
-const output = transformJison(jison_grammar_state)
+// console.log(stateDiagramParser);
+
+const result = stateDiagramParser.parse(input);
+console.log(result);
+
+//console.log(mermaid);
