@@ -299,13 +299,7 @@ function make_mermaid_graph(message) {
   const all_elements = get_all_elements(directions)
   const mermaid_graph = mark_graph(directions, all_elements)
 
-  console.log(output)
-  console.log(directions)
-  console.log(all_elements)
-  console.log(mermaid_graph)
   return mermaid_graph
 }
 
 var result = make_mermaid_graph(input4)
-
-//console.log(result)
