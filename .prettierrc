@@ -7,11 +7,12 @@
 	"endOfLine": "lf",
 	"semi": true,
 	"overrides": [
-		{
-			"files": ".ts?x",
-			"options": {
-				"parser": "typescript"
-			}
+	  {
+		"files": ".ts?x",
+		"options": {
+		  "parser": "typescript"
 		}
+	  }
 	]
-}
+  }
+  
