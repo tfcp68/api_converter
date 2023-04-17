@@ -7,19 +7,11 @@
 		"test": "",
 		"build": "tsc && node dist/stateParser.js"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/tfcp68/api_converter/tree/mermaid_parser"
-	},
 	"keywords": [
 		"react"
 	],
 	"author": "Alexander Solodonvikov",
 	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/tfcp68/api_converter/issues"
-	},
-	"homepage": "https://github.com/tfcp68/api_converter/blob/mermaid_parser/README.md",
 	"devDependencies": {
 		"@babel/core": "^7.21.3",
 		"@babel/preset-env": "^7.20.2",
