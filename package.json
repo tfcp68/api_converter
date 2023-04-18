@@ -4,8 +4,9 @@
 	"description": "",
 	"main": ".state/stateParser.ts",
 	"scripts": {
-		"test": "",
-		"build": "tsc && node dist/stateParser.js"
+		"test": "node .dist/stateParser.js",
+		"build": "tsc --project tsconfig.json",
+		"start": "tsc && node dist/stateParser.js"
 	},
 	"keywords": [
 		"react"

@@ -3,8 +3,8 @@ import * as fs from 'fs'
 import * as jison from 'jison'
 
 
-let bnf = fs.readFileSync("./grammar/stateDiagram.jison", "utf8");
-let parser = jison.Parser(bnf);
+const bnf = fs.readFileSync("./grammar/stateDiagram.jison", "utf8");
+const parser = jison.Parser(bnf);
 
 
 const DEFAULT_DIAGRAM_DIRECTION = 'LR';
@@ -30,13 +30,13 @@ function newClassesList() {
 
 let direction = DEFAULT_DIAGRAM_DIRECTION;
 let rootDoc: any = [];
-let classes = newClassesList();
+const classes = newClassesList();
 let dividerCnt = 0;
 
 const setRootDoc = (o: any) => {
     rootDoc = o;
   };
-  
+
 const getRootDoc = () => rootDoc;
 
 const getDirection = () => direction;
@@ -60,7 +60,7 @@ parser.yy.getDirection = getDirection
 parser.yy.getDividerId = getDividerId
 
 
-var input1 = `stateDiagram-v2
+const input1 = `stateDiagram-v2
 [*] --> Still
 Still --> [*]
 Still --> Moving
@@ -68,7 +68,7 @@ Moving --> Still
 Moving --> Crash
 Crash --> [*]`
 
-var input2 = `stateDiagram-v2
+const input2 = `stateDiagram-v2
 [*]-->INIT: RESET
 INIT-->INTRO: RUN
 INTRO-->MAIN_MENU: TO_MENU
@@ -86,7 +86,7 @@ IN_GAME-->MAIN_MENU: TO_MENU
 SCORE_SCREEN-->MAIN_MENU: TO_MENU
 SCORE_SCREEN-->[*]: EXIT`
 
-var input3 = `stateDiagram-v2
+const input3 = `stateDiagram-v2
 direction LR
 [*]-->IDLE: RESET
 IDLE-->FINISHED: SKIP
@@ -138,7 +138,7 @@ end note
 EFFECT_APPLIED-->IDLE: APPLY_EFFECT
 FINISHED --> [*]`
 
-var input4 = `stateDiagram-v2
+const input4 = `stateDiagram-v2
 [*]-->IDLE: RESET
 note left of IDLE
 emit/startTradeCollection
@@ -185,7 +185,7 @@ OFFER_ACCEPTED-->FINISHED: ACCEPT_OFFER
 FINISHED --> [*]`
 
 
-var input_sad = `stateDiagram-v2
+const input_sad = `stateDiagram-v2
 [*] --> First
 First --> Second
 First --> Third
@@ -223,23 +223,23 @@ function take_directions(parsed_diargam: any): DirectionsArray {
      * @param parsed_diargam: словарь, который был получен из парсера
      * @returns Возвращает направления из диаграммы и комментарий к ней
      */
-    let directions: DirectionsArray = []
+    const directions: DirectionsArray = []
 
     for(let i = 0; i < parsed_diargam.length; i++) {
-        if(parsed_diargam[i].stmt == 'relation') {
-        let direction_i: string[] = []
-        let st1 = parsed_diargam[i].state1.id
-        let st2 = parsed_diargam[i].state2.id
-        
-        if(st1 == '[*]' && st2 == '[*]') {
+        if(parsed_diargam[i].stmt === 'relation') {
+        const direction_i: string[] = []
+        const st1 = parsed_diargam[i].state1.id
+        const st2 = parsed_diargam[i].state2.id
+
+        if(st1 === '[*]' && st2 === '[*]') {
             direction_i.push('~~~START~~~')
             direction_i.push('~~~END~~~')
         }
-        if (st1 == '[*]') {
+        if (st1 === '[*]') {
             direction_i.push('~~~START~~~')
             direction_i.push(st2)
         }
-        else if(st2 == '[*]') {
+        else if(st2 === '[*]') {
             direction_i.push(st1)
             direction_i.push('~~~END~~~')
         }
@@ -271,11 +271,11 @@ function get_all_elements(directions: DirectionsArray): string[] {
      * @param directions: массив направлений
      * @returns Возвращает элементы диаграммы в виде массива
      */
-    let dict_elements: string[] = []
+    const dict_elements: string[] = []
 
     for(let i = 0; i < directions.length; i++) {
         for(let j = 0; j < 2; j++) {
-            let element = directions[i][j]
+            const element = directions[i][j]
             if(!dict_elements.includes(element)) {
                 dict_elements.push(element)
             }
@@ -293,13 +293,13 @@ function setup_actions(directions: DirectionsArray, all_elements: string[]) {
      * @param all_elements: элементы, которые есь в мермаид диаграмме
      * @returns Возвращает словарь actions
      */
-    let actions: any = {}
+    const actions: any = {}
 
-    for (let i in all_elements) {
-        let element_i = all_elements[i]
+    for (let i = 0; i < all_elements.length; i++) {
+        const element_i = all_elements[i]
         actions[element_i] = {}
-        for(let j in all_elements) {
-            let element_j = all_elements[j]
+        for(let j = 0; j < all_elements.length; j++) {
+            const element_j = all_elements[j]
             actions[element_i][element_j] = null
         }
     }
@@ -310,7 +310,7 @@ function setup_actions(directions: DirectionsArray, all_elements: string[]) {
         const to = pair_of_elements[1]
         const description = pair_of_elements[2]
 
-        if(actions[from][to] == null) {
+        if(actions[from][to] === null) {
             actions[from][to] = [description]
 
         }
@@ -330,15 +330,15 @@ function setup_notes(parsed_diargam: any, all_elements: string[]) {
      * @param all_elements: элементы, которые есь в мермаид диаграмме
      * @returns Возвращает словарь записок из мермаид диаграммы
      */
-    let notes: any = {}
+    const notes: any = {}
 
-    for(let i in all_elements) {
-        let element_i = all_elements[i]
+    for(let i = 0; i < all_elements.length; i++) {
+        const element_i = all_elements[i]
         notes[element_i] = null
     }
 
-    for(let i in parsed_diargam) {
-        if(parsed_diargam[i].stmt == 'state') {
+    for(let i = 0; i < parsed_diargam.length; i++) {
+        if(parsed_diargam[i].stmt === 'state') {
             const keys = Object.keys(parsed_diargam[i])
 
             if(keys.includes('note')) {
@@ -346,10 +346,10 @@ function setup_notes(parsed_diargam: any, all_elements: string[]) {
 
                 if(note_keys.includes('text')) {
                     const from: string = parsed_diargam[i].id
-                    const note_text: string = parsed_diargam[i].note.text 
-                    
-                    if(notes[from] == null) {
-                        notes[from] = [note_text] 
+                    const note_text: string = parsed_diargam[i].note.text
+
+                    if(notes[from] === null) {
+                        notes[from] = [note_text]
                     }
                     else {
                         notes[from].push(note_text)
@@ -362,18 +362,84 @@ function setup_notes(parsed_diargam: any, all_elements: string[]) {
     return notes
 }
 
+
 function mark_graph(parsed_diargam: any, directions: DirectionsArray, all_elements: string[]) {
     /**
-     * @brief Функция, которая по направлениям и элементам строит словарь связей 
+     * @brief Функция, которая по направлениям и элементам строит словарь связей
      * @param parsed_diargam: словарь, который был получен из парсера
      * @param directions: массив направлений
      * @param all_elements: элементы, которые есь в мермаид диаграмме
-     * @returns Возвращает словарь связей 
+     * @returns Возвращает словарь связей
      */
-    let mermaid_graph: any = {}
+    const mermaid_graph: any = {}
     mermaid_graph['states'] = all_elements
     mermaid_graph['actions'] = setup_actions(directions, all_elements)
     mermaid_graph['notes'] = setup_notes(parsed_diargam, all_elements)
+
+    return mermaid_graph
+}
+
+
+function find_choices(parsed_diargam: any): string[] {
+    /**
+     * @brief Функция, которая ищет "элементы развилки"
+     * @param parsed_diargam: словарь, который был получен из парсера
+     * @returns Возвращает массив с "элементами развилки"
+     */
+    const choices: string[] = []
+
+    for(let i = 0; i < parsed_diargam.length; i++) {
+        if(parsed_diargam[i].stmt === 'state') {
+            const keys = Object.keys(parsed_diargam[i])
+            if(keys.includes('type')) {
+                const state_type = parsed_diargam[i].type
+
+                if(state_type === 'choice') {
+                    const choice_element = parsed_diargam[i].id
+                    choices.push(choice_element)
+                }
+            }
+        }
+    }
+
+    return choices
+}
+
+
+function mark_choices(parsed_diargam: any, directions: DirectionsArray, mermaid_graph: any) {
+    /**
+     * @brief Функция, которая дополняет связи actions пунктами из "элементов развилок"
+     * @param parsed_diargam: словарь, который был получен из парсера
+     * @param directions: массив направлений
+     * @param mermaid_graph: словарь связей, который будет дополнен
+     * @returns Возвращает обновлённый словарь связей
+     */
+    const choices = find_choices(parsed_diargam)
+
+    for(let k = 0; k < choices.length; k++) {
+        const choice: string = choices[k]
+
+        const branch = mermaid_graph['actions'][choice]
+        for(let i = 0; i < directions.length; i++) {
+            const to_choice = directions[i][1]
+
+            if(to_choice === choice) {
+                const from = directions[i][0]
+
+                //в mermaid_graph должен в from добавить пункты из to
+                for(const to in mermaid_graph['actions'][from]) {
+                    if(branch[to] !== null) {
+                        if(mermaid_graph['actions'][from][to] === null) {
+                            mermaid_graph['actions'][from][to] = branch[to]
+                        }
+                        else {
+                            mermaid_graph['actions'][from][to] = mermaid_graph['actions'][from][to].concat(branch[to])
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     return mermaid_graph
 }
@@ -388,10 +454,10 @@ export function make_mermaid_graph(message: string) {
     const parsed_diargam = exec(message)
     const directions = take_directions(parsed_diargam)
     const all_elements = get_all_elements(directions)
-    const mermaid_graph = mark_graph(parsed_diargam, directions, all_elements)
-
+    let mermaid_graph = mark_graph(parsed_diargam, directions, all_elements)
+    mermaid_graph = mark_choices(parsed_diargam, directions, mermaid_graph)
     return mermaid_graph
 }
 
-let result = make_mermaid_graph(input4)
+const result = make_mermaid_graph(input4)
 console.log(result)
