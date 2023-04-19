@@ -219,7 +219,7 @@ function exec (input: string) {
 
 function take_directions(parsed_diargam: any): DirectionsArray {
     /**
-     * @brief Функция, которая получает направления из диаграммы
+     * @brief Функция, которая собирает направления из диаграммы
      * @param parsed_diargam: словарь, который был получен из парсера
      * @returns Возвращает направления из диаграммы и комментарий к ней
      */
@@ -267,7 +267,7 @@ function take_directions(parsed_diargam: any): DirectionsArray {
 
 function get_all_elements(directions: DirectionsArray): string[] {
     /**
-     * @brief Функция, которая получает элементы, которые есть в мермаид диаграмме
+     * @brief Функция, которая собирает элементы, которые есть в мермаид диаграмме
      * @param directions: массив направлений
      * @returns Возвращает элементы диаграммы в виде массива
      */
@@ -288,7 +288,7 @@ function get_all_elements(directions: DirectionsArray): string[] {
 
 function setup_actions(directions: DirectionsArray, all_elements: string[]) {
     /**
-     * @brief Функция, которая делает словарь actions
+     * @brief Функция, которая делает словарь связей actions
      * @param directions: массив направлений
      * @param all_elements: элементы, которые есь в мермаид диаграмме
      * @returns Возвращает словарь actions
@@ -363,6 +363,22 @@ function setup_notes(parsed_diargam: any, all_elements: string[]) {
 }
 
 
+function find_sus_directions(directions: DirectionsArray) {
+    /**
+     * @brief Функция, собирает подозрительные переходы без комментариев
+     * @param directions: массив направлений
+     * @returns Возвращает массив с подозрительными переходами
+     */
+    const sus_directions = []
+
+    for(let i = 0; i < directions.length; i++) {
+        if(directions[i][2] === '') {
+            sus_directions.push(directions[i])
+        }
+    }
+    return sus_directions
+}
+
 function mark_graph(parsed_diargam: any, directions: DirectionsArray, all_elements: string[]) {
     /**
      * @brief Функция, которая по направлениям и элементам строит словарь связей
@@ -375,6 +391,7 @@ function mark_graph(parsed_diargam: any, directions: DirectionsArray, all_elemen
     mermaid_graph['states'] = all_elements
     mermaid_graph['actions'] = setup_actions(directions, all_elements)
     mermaid_graph['notes'] = setup_notes(parsed_diargam, all_elements)
+    mermaid_graph['sus_directions'] = find_sus_directions(directions)
 
     return mermaid_graph
 }
@@ -425,15 +442,18 @@ function mark_choices(parsed_diargam: any, directions: DirectionsArray, mermaid_
 
             if(to_choice === choice) {
                 const from = directions[i][0]
+                const choice_description = directions[i][2]
 
                 //в mermaid_graph должен в from добавить пункты из to
                 for(const to in mermaid_graph['actions'][from]) {
                     if(branch[to] !== null) {
                         if(mermaid_graph['actions'][from][to] === null) {
-                            mermaid_graph['actions'][from][to] = branch[to]
+                            //mermaid_graph['actions'][from][to] = branch[to]
+                            mermaid_graph['actions'][from][to] = [choice_description]
                         }
                         else {
-                            mermaid_graph['actions'][from][to] = mermaid_graph['actions'][from][to].concat(branch[to])
+                            //mermaid_graph['actions'][from][to] = mermaid_graph['actions'][from][to].concat(branch[to])
+                            mermaid_graph['actions'][from][to].push(choice_description)
                         }
                     }
                 }
@@ -459,5 +479,5 @@ export function make_mermaid_graph(message: string) {
     return mermaid_graph
 }
 
-const result = make_mermaid_graph(input4)
+const result = make_mermaid_graph(input1)
 console.log(result)
