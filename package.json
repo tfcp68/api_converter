@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "node .dist/stateParser.js",
 		"build": "tsc --project tsconfig.json",
-		"start": "tsc && node dist/stateParser.js"
+		"start": "tsc && node dist/stateParser.js",
+		"test2": "tsc && node dist/test.js"
 	},
 	"keywords": [
 		"react"
@@ -21,6 +22,7 @@
 		"@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
 		"@types/node": "^18.15.3",
 		"@types/react": "^18.0.27",
+		"@types/mermaid": "9.2.0",
 		"@types/react-dom": "^18.0.10",
 		"@typescript-eslint/eslint-plugin": "^5.55.0",
 		"@typescript-eslint/parser": "^5.55.0",
